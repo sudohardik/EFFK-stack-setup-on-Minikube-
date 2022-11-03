@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: fluentd
+  namespace: fluentbit-test
+spec:
+  selector:
+    app: fluentd
+  ports:
+    - port: 24224

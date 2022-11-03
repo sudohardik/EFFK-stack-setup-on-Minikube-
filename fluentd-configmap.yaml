@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentdconfig
+  namespace: fluentbit-test
+  labels:
+    k8s-app: fluentd-logging
+    version: v1
+    kubernetes.io/cluster-service: "true"
+data:
+
+  fluent.conf: |
+    <source>
+      @type forward
+      bind 0.0.0.0
+      port 24224
+    </source>
+    
+    # <match kube.hello-world.**>
+    #    @type elasticsearch
+    #    @id out_es
+    #    @log_level info
+    #    include_tag_key true
+    #    host "#{ENV['FLUENT_ELASTICSEARCH_HOST']}"
+    #    port "#{ENV['FLUENT_ELASTICSEARCH_PORT']}"
+    #    scheme "#{ENV['FLUENT_ELASTICSEARCH_SCHEME'] || 'http'}"
+    #    logstash_prefix "#{ENV['FLUENT_ELASTICSEARCH_LOGSTASH_PREFIX'] || 'hello-world'}"
+    #    logstash_format true
+    # </match>
+    
+    # <match kube.hello-istio.**>
+    #    @type elasticsearch
+    #    @id out_es1
+    #    @log_level info
+    #    include_tag_key true
+    #    host "#{ENV['FLUENT_ELASTICSEARCH_HOST']}"
+    #    port "#{ENV['FLUENT_ELASTICSEARCH_PORT']}"
+    #    scheme "#{ENV['FLUENT_ELASTICSEARCH_SCHEME'] || 'http'}"
+    #    logstash_prefix "#{ENV['FLUENT_ELASTICSEARCH_LOGSTASH_PREFIX'] || 'hello-istio'}"
+    #    logstash_format true
+    # </match>
+    <filter kubernetes.**>
+        @type kubernetes_metadata
+    </filter>
